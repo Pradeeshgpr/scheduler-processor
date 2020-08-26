@@ -9,4 +9,5 @@ public class DBConnection {
 
     public static final String ENTITY_MANAGER_FACTORY_BEAN = "exampleEntityManagerFactory";
     public static final String TRANSACTION_MANAGER_FACTORY_BEAN = "exampleTransactionManagerFactory";
+    public static final String BASE_PACKAGE_JPA_REPOSITORY = "com.example.scheduler.processor.repository";
 }

@@ -8,4 +8,5 @@ public class ScheduledTriggerDetailsConst {
     public static final String LAST_UPDATED_COLUMN = "last_updated";
     public static final String CREATED_TS_COLUMN = "created_ts";
     public static final String TRIGGER_MAPPED_BY = "scheduledTriggerDetails";
+    public static final String STATUS = "status";
 }

@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaDialect;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -21,7 +20,8 @@ import java.util.Map;
 
 @Configuration
 @EnableJpaRepositories(entityManagerFactoryRef = DBConnection.ENTITY_MANAGER_FACTORY_BEAN,
-        transactionManagerRef = DBConnection.TRANSACTION_MANAGER_FACTORY_BEAN)
+        transactionManagerRef = DBConnection.TRANSACTION_MANAGER_FACTORY_BEAN,
+        basePackages = DBConnection.BASE_PACKAGE_JPA_REPOSITORY)
 @PropertySource({"classpath:db/mysql-config-${spring.profiles.active}.properties"})
 public class DatabaseConfig {
 
