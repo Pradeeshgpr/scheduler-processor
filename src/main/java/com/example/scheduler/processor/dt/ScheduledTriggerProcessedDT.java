@@ -29,7 +29,7 @@ public class ScheduledTriggerProcessedDT {
     private Date startedTS;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = ScheduledTriggerProcessedConst.TRIGGER_ID_COLUMN, nullable = false)
+    @JoinColumn(name = ScheduledTriggerProcessedConst.TRIGGER_ID_COLUMN)
     private ScheduledTriggerDetailsDT scheduledTriggerDetails;
 
     public enum State {

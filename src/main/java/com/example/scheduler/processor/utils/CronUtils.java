@@ -3,7 +3,6 @@ package com.example.scheduler.processor.utils;
 import org.springframework.scheduling.support.CronSequenceGenerator;
 
 import java.util.Date;
-import java.util.Locale;
 
 public class CronUtils {
 

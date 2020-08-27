@@ -15,19 +15,21 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.LockModeType;
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class ScheduleTriggerService implements IScheduler {
 
-    private static final long FIXED_RATE = 300000;
+    private static final long FIXED_RATE = 10000;
 
     private ScheduledTriggerDetailsRepository scheduledTriggerDetailsRepository;
 
     private ScheduledTriggerDetailsRepositoryImpl scheduledTriggerDetailsRepositoryImpl;
 
     private ScheduledTriggerJobsRepository scheduledTriggerJobsRepository;
+
+    private static final List<ScheduledTriggerDetailsDT.Status> DEFAULT_QUERY_ELEMENTS = Arrays.asList(ScheduledTriggerDetailsDT.Status.NOT_PROVISIONED,ScheduledTriggerDetailsDT.Status.DELETE);
 
     @Autowired
     public ScheduleTriggerService(ScheduledTriggerDetailsRepositoryImpl scheduledTriggerDetailsRepositoryImpl, ScheduledTriggerDetailsRepository scheduledTriggerDetailsRepository, ScheduledTriggerJobsRepository scheduledTriggerJobsRepository) {
@@ -42,15 +44,21 @@ public class ScheduleTriggerService implements IScheduler {
     @Lock(LockModeType.PESSIMISTIC_FORCE_INCREMENT)
     public void process() {
         System.out.println("Checking for scheduled jobs");
-        Iterable<ScheduledTriggerDetailsDT> notProvisionedJobs = scheduledTriggerDetailsRepository.findByStatus(ScheduledTriggerDetailsDT.Status.NOT_PROVISIONED);
+        Iterable<ScheduledTriggerDetailsDT> notProvisionedJobs = scheduledTriggerDetailsRepository.findByStatusIn(DEFAULT_QUERY_ELEMENTS);
         notProvisionedJobs.forEach(scheduledTriggerDetails -> processScheduledTrigger(scheduledTriggerDetails));
         System.out.println("Processing completed");
     }
 
     private void processScheduledTrigger (ScheduledTriggerDetailsDT scheduledTriggerDetails) {
         try {
-            scheduledTriggerDetails.setStatus(ScheduledTriggerDetailsDT.Status.PROVISIONED);
-            createTriggerJob(scheduledTriggerDetails);
+            if (scheduledTriggerDetails.getStatus() == ScheduledTriggerDetailsDT.Status.NOT_PROVISIONED) {
+                scheduledTriggerDetails.setStatus(ScheduledTriggerDetailsDT.Status.PROVISIONED);
+                createTriggerJob(scheduledTriggerDetails);
+            } else if (scheduledTriggerDetails.getStatus() == ScheduledTriggerDetailsDT.Status.DELETE) {
+                scheduledTriggerDetails.setStatus(ScheduledTriggerDetailsDT.Status.DELETED);
+                scheduledTriggerJobsRepository.delete(scheduledTriggerDetails.getScheduledTriggerJobs());
+                scheduledTriggerDetailsRepository.save(scheduledTriggerDetails);
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
             scheduledTriggerDetails.setStatus(ScheduledTriggerDetailsDT.Status.ERROR);

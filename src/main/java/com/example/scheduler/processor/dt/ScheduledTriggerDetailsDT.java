@@ -30,7 +30,7 @@ public class ScheduledTriggerDetailsDT {
     @Column(name = ScheduledTriggerDetailsConst.CREATED_TS_COLUMN, nullable = false)
     private Date createdTS;
 
-    @OneToOne(mappedBy = ScheduledTriggerDetailsConst.TRIGGER_MAPPED_BY, targetEntity = ScheduledTriggerJobsDT.class, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = ScheduledTriggerDetailsConst.TRIGGER_MAPPED_BY, targetEntity = ScheduledTriggerJobsDT.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private ScheduledTriggerJobsDT scheduledTriggerJobs;
 
     @OneToMany(mappedBy = ScheduledTriggerProcessedConst.TRIGGER_MAPPED_BY)
@@ -41,7 +41,7 @@ public class ScheduledTriggerDetailsDT {
     private Status status;
 
     public enum Status {
-        NOT_PROVISIONED,PROVISIONED,ERROR;
+        NOT_PROVISIONED,PROVISIONED,ERROR, DELETE, DELETED;
     }
 
     @Override

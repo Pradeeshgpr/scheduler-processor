@@ -1,7 +1,7 @@
 package com.example.scheduler.processor.dt;
 
-import com.example.scheduler.processor.conzt.dt.ScheduledTriggerJobsConst;
 import com.example.scheduler.processor.conzt.dt.ScheduledTriggerDetailsConst;
+import com.example.scheduler.processor.conzt.dt.ScheduledTriggerJobsConst;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -29,8 +29,8 @@ public class ScheduledTriggerJobsDT {
     @Column(name = ScheduledTriggerJobsConst.LAST_UPDATED_TS_COLUMN)
     private Date lastUpdatedTS;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = ScheduledTriggerJobsConst.TRIGGER_ID_COLUMN, referencedColumnName = ScheduledTriggerDetailsConst.ID_COLUMN, nullable = false)
+    @OneToOne
+    @JoinColumn(name = ScheduledTriggerJobsConst.TRIGGER_ID_COLUMN, referencedColumnName = ScheduledTriggerDetailsConst.ID_COLUMN)
     private ScheduledTriggerDetailsDT scheduledTriggerDetails;
 
 }
