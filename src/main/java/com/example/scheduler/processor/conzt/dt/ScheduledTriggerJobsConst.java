@@ -8,4 +8,5 @@ public class ScheduledTriggerJobsConst {
     public static final String LAST_RUN_COLUMN = "last_run";
     public static final String LAST_UPDATED_TS_COLUMN = "last_updated_ts";
     public static final String CREATED_TS_COLUMN = "created_ts";
+    public static final String PRIORITY = "priority";
 }

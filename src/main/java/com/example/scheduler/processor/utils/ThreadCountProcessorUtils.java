@@ -11,6 +11,10 @@ public class ThreadCountProcessorUtils {
     @Autowired
     private Environment environment;
 
+    public final int getFreeThreadCount(int activeCount, int queueCount, int maximumPoolSize) {
+        return maximumPoolSize - (activeCount+ queueCount);
+    }
+
     public final int getActiveThreadCount() {
         return Integer.parseInt(environment.getProperty(ThreadConfiguration.NUM_THREAD, ThreadConfiguration.NUM_THREAD_DEFAULT));
     }

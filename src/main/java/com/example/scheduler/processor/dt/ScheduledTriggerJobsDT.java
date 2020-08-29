@@ -29,6 +29,9 @@ public class ScheduledTriggerJobsDT {
     @Column(name = ScheduledTriggerJobsConst.LAST_UPDATED_TS_COLUMN)
     private Date lastUpdatedTS;
 
+    @Column(name = ScheduledTriggerJobsConst.PRIORITY, nullable = false)
+    private int priority;
+
     @OneToOne
     @JoinColumn(name = ScheduledTriggerJobsConst.TRIGGER_ID_COLUMN, referencedColumnName = ScheduledTriggerDetailsConst.ID_COLUMN)
     private ScheduledTriggerDetailsDT scheduledTriggerDetails;

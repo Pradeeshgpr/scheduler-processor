@@ -9,4 +9,5 @@ public class ScheduledTriggerDetailsConst {
     public static final String CREATED_TS_COLUMN = "created_ts";
     public static final String TRIGGER_MAPPED_BY = "scheduledTriggerDetails";
     public static final String STATUS = "status";
+    public static final String PRIORITY = "priority";
 }

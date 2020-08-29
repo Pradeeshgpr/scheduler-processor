@@ -56,13 +56,13 @@ public class ScheduleTriggerService implements IScheduler {
     public void process() {
         System.out.println("Checking for scheduled jobs");
         int limit = getLimitByThreadCount();
-        Iterable<ScheduledTriggerDetailsDT> notProvisionedJobs = scheduledTriggerDetailsRepository.findByStatusIn(DEFAULT_QUERY_ELEMENTS);
+        Iterable<ScheduledTriggerDetailsDT> notProvisionedJobs = scheduledTriggerDetailsRepositoryImpl.getTriggerDetailsToBeScheduled(limit, DEFAULT_QUERY_ELEMENTS);
         notProvisionedJobs.forEach(scheduledTriggerDetails -> threadPoolExecutor.execute(processScheduledTrigger(scheduledTriggerDetails)));
         System.out.println("Processing completed");
     }
 
     public int getLimitByThreadCount() {
-        return threadPoolExecutor.getMaximumPoolSize();
+        return  threadCountProcessorUtils.getFreeThreadCount(threadPoolExecutor.getActiveCount(), threadPoolExecutor.getPoolSize(), threadPoolExecutor.getMaximumPoolSize());
     }
 
     private Runnable processScheduledTrigger (ScheduledTriggerDetailsDT scheduledTriggerDetails) {
@@ -85,7 +85,6 @@ public class ScheduleTriggerService implements IScheduler {
                 }
             }
         };
-
     }
 
     private void createTriggerJob(ScheduledTriggerDetailsDT scheduledTriggerDetails) {
@@ -93,6 +92,7 @@ public class ScheduleTriggerService implements IScheduler {
         scheduledTriggerJobsDT.setCreatedTS(DateUtils.getUTCDate());
         scheduledTriggerJobsDT.setLastUpdatedTS(DateUtils.getUTCDate());
         scheduledTriggerJobsDT.setNextRun(CronUtils.getNextRun(scheduledTriggerDetails.getExpression()));
+        scheduledTriggerJobsDT.setPriority(scheduledTriggerDetails.getPriority());
         scheduledTriggerJobsDT.setScheduledTriggerDetails(scheduledTriggerDetails);
         scheduledTriggerJobsRepository.save(scheduledTriggerJobsDT);
     }

@@ -30,6 +30,9 @@ public class ScheduledTriggerDetailsDT {
     @Column(name = ScheduledTriggerDetailsConst.CREATED_TS_COLUMN, nullable = false)
     private Date createdTS;
 
+    @Column(name = ScheduledTriggerDetailsConst.PRIORITY, nullable = false)
+    private int priority;
+
     @OneToOne(mappedBy = ScheduledTriggerDetailsConst.TRIGGER_MAPPED_BY, targetEntity = ScheduledTriggerJobsDT.class, fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private ScheduledTriggerJobsDT scheduledTriggerJobs;
 
